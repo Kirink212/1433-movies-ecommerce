@@ -1,0 +1,13 @@
+.movie-card {
+  max-width: 200px;
+}
+
+.container {
+  display: flex;
+  justify-content: start;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: auto;
+  max-width: 900px;
+  margin-top: 50px;
+}
