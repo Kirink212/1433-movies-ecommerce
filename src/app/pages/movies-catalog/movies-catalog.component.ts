@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Movie } from '../../models/movie';
-import { MatCardModule } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
 import { MoviesService } from '../../services/movies.service';
-import { MatIconButton } from '@angular/material/button';
+import { MovieCardComponent } from '../../components/movie-card.component/movie-card.component';
 
 @Component({
   selector: 'app-movies-catalog',
-  imports: [MatCardModule, MatIcon, MatIconButton],
+  imports: [MovieCardComponent],
   templateUrl: './movies-catalog.component.html',
   styleUrl: './movies-catalog.component.css',
 })

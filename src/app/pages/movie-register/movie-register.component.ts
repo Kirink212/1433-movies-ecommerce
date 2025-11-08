@@ -9,6 +9,7 @@ import { MoviesService } from '../../services/movies.service';
 import { Movie } from '../../models/movie';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { defer, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-movie-register',
@@ -31,6 +32,9 @@ export class MovieRegisterComponent {
     "Romance",
     "Horror",
   ];
+  imagePreview?: string | null;
+  fileError?: string | null;
+  file: File | undefined;
 
   constructor(private moviesService: MoviesService, private router: Router, private matSnackBar: MatSnackBar) {
     this.formGroup = new FormGroup({
@@ -44,16 +48,60 @@ export class MovieRegisterComponent {
     });
   }
 
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.file = input.files?.[0];
+
+    if (!this.file) {
+      this.imagePreview = null;
+      return;
+    }
+
+    if (!this.file.type.startsWith('image/')) {
+      this.fileError = 'Por favor, selecione um arquivo do tipo imagem';
+      this.imagePreview = null;
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => this.imagePreview = reader.result as string;
+    reader.readAsDataURL(this.file);
+  }
+
   onSubmit() {
     if (!this.formGroup.valid) {
       this.formGroup.markAllAsTouched();
       return;
     };
 
-    const movieData: Movie = this.formGroup.value;
-    this.moviesService.createOne(movieData).subscribe((movie: Movie) => {
-      this.matSnackBar.open(`O filme '${movie.title}' foi criado com sucesso!`, "Fechar");
-      this.router.navigate(['']);
+    defer(() =>
+      this.file
+        ? this.moviesService.uploadImage(this.file)
+        : of<{ imageUrl?: string }>({ imageUrl: undefined })
+    ).pipe(
+      switchMap(({ imageUrl }) => {
+        const movieData: Movie = {
+          ...this.formGroup.value,
+          imageLink: imageUrl,
+        };
+        return this.moviesService.createOne(movieData);
+      })
+    ).subscribe({
+      next: (movie: Movie) => {
+        this.matSnackBar.open(`O filme '${movie.title}' foi criado com sucesso!`, 'Fechar', {
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          duration: 3000
+        });
+        this.router.navigate(['']);
+      },
+      error: () => {
+        this.matSnackBar.open('Não foi possível adicionar o filme.', 'Fechar', {
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          duration: 3000
+        });
+      }
     });
   }
 }
