@@ -4,7 +4,18 @@
   <button matButton routerLink="" routerLinkActive="active-button" [routerLinkActiveOptions]="{ exact: true }">
     Catálogo de filmes
   </button>
-  <button matButton routerLink="movies/add" routerLinkActive="active-button" [routerLinkActiveOptions]="{ exact: true }">
-    Adicionar filme
-  </button>
+
+  @if (isLoggedIn) {
+    <button matButton routerLink="movies/add" routerLinkActive="active-button" [routerLinkActiveOptions]="{ exact: true }">
+      Adicionar filme
+    </button>
+    
+    <button matButton (click)="logoutCurrentUser()">
+      Logout
+    </button>
+  } @else {
+    <button matButton aria-label="Login user" routerLink="login">
+      Login
+    </button>
+  }
 </mat-toolbar>

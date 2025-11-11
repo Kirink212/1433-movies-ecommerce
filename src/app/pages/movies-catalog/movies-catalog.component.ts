@@ -21,4 +21,8 @@ export class MoviesCatalogComponent implements OnInit {
       this.movies = movies;
     })
   }
+
+  deleteCard(id: string) {
+    this.movies = this.movies.filter((movie) => movie.id !== id);
+  }
 }
