@@ -5,6 +5,10 @@
     Catálogo de filmes
   </button>
 
+  <button mat-icon-button>
+    <mat-icon>shopping_cart</mat-icon>
+  </button>
+
   @if (isLoggedIn) {
     <button matButton routerLink="movies/add" routerLinkActive="active-button" [routerLinkActiveOptions]="{ exact: true }">
       Adicionar filme

@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,10 @@ import { HeaderComponent } from './components/header/header.component';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('movies-ecommerce');
+export class App implements OnInit{
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.authService.checkLoginExpiration();
+  }
 }

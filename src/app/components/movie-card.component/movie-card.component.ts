@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MovieDeleteDialogComponent } from '../movie-delete-dialog.component/movie-delete-dialog.component';
 import { MoviesService } from '../../services/movies.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-movie-card',
@@ -18,8 +19,16 @@ export class MovieCardComponent {
   @Input() movie!: Movie;
   @Output() deleteCard: EventEmitter<string> = new EventEmitter();
 
-  constructor(private dialog: MatDialog, private moviesService: MoviesService, private snackBar: MatSnackBar) {
+  constructor(
+    private dialog: MatDialog,
+    private moviesService: MoviesService,
+    private authService: AuthService,
+    private snackBar: MatSnackBar) {
 
+  }
+
+  get isLoggedIn(): boolean {
+    return this.authService.isAuthenticated();
   }
 
   confirmDelete() {
@@ -44,8 +53,13 @@ export class MovieCardComponent {
 
             this.deleteCard.emit(this.movie.id);
           },
-          error: () => {
-            this.snackBar.open('Não foi possível excluir o filme.', 'Fechar', {
+          error: (err) => {
+            let msg = 'Não foi possível excluir o filme.';
+            if (err.status == 401) {
+              msg = 'Você não está autorizado para realizar a exclusão de um filme.'
+            }
+            
+            this.snackBar.open(msg, 'Fechar', {
               horizontalPosition: "end",
               verticalPosition: "top",
               duration: 3000
