@@ -42,7 +42,7 @@ export class AuthService {
       .pipe(
         tap(({ token }: LoginResponse) => {
           localStorage.setItem("loggedUser", JSON.stringify({ token }));
-          this.scheduleLogout()
+          this.scheduleLogout();
         }),
         map(res => res?.token? true : false)
       );
@@ -63,14 +63,12 @@ export class AuthService {
 
     const now = Math.floor(Date.now() / 1000);
     const timeUntilExp = Math.max((payload.exp - now), 0);
-    console.log(timeUntilExp);
 
     this.expTimer = setTimeout(() => this.logout(), timeUntilExp * 1000);
   }
 
   checkLoginExpiration() {
     if (this.isTokenExpired()) {
-      console.log("asdasdasdasdasd");
       this.logout();
       return;
     }

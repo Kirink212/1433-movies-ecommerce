@@ -4,10 +4,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { Movie } from '../../models/movie';
 import { MatDialog } from '@angular/material/dialog';
-import { MovieDeleteDialogComponent } from '../movie-delete-dialog.component/movie-delete-dialog.component';
+import { MovieDeleteDialogComponent } from '../movie-delete-dialog/movie-delete-dialog.component';
 import { MoviesService } from '../../services/movies.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-movie-card',
@@ -22,6 +23,7 @@ export class MovieCardComponent {
   constructor(
     private dialog: MatDialog,
     private moviesService: MoviesService,
+    private cartService: CartService,
     private authService: AuthService,
     private snackBar: MatSnackBar) {
 
@@ -29,6 +31,10 @@ export class MovieCardComponent {
 
   get isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
+  }
+
+  addItemToCart(movie: Movie) {
+    this.cartService.addItem(movie);
   }
 
   confirmDelete() {
