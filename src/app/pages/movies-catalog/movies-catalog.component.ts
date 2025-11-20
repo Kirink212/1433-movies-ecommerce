@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Movie } from '../../models/movie';
 import { MoviesService } from '../../services/movies.service';
 import { MovieCardComponent } from '../../components/movie-card/movie-card.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-movies-catalog',
-  imports: [MovieCardComponent],
+  imports: [MovieCardComponent, MatProgressSpinner],
   templateUrl: './movies-catalog.component.html',
   styleUrl: './movies-catalog.component.css',
 })

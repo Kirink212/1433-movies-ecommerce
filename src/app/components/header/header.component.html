@@ -5,21 +5,30 @@
     {{ 'header.moviesList' | translate }}
   </button>
 
-  <button mat-icon-button (click)="drawer.toggle()">
-    <mat-icon>shopping_cart</mat-icon>
-  </button>
-
   @if (isLoggedIn) {
     <button matButton routerLink="movies/add" routerLinkActive="active-button" [routerLinkActiveOptions]="{ exact: true }">
-      Adicionar filme
+      {{ 'header.addNewMovie' | translate }}
     </button>
     
     <button matButton (click)="logoutCurrentUser()">
-      Logout
+      {{ 'header.logout' | translate }}
     </button>
   } @else {
     <button matButton aria-label="Login user" routerLink="login">
-      Login
+      {{ 'header.login' | translate }}
     </button>
   }
+
+  <div>
+    <button mat-button (click)="changeLanguage('pt-br')">
+      {{ 'header.languages.portuguese' | translate }}
+    </button>
+    <button mat-button (click)="changeLanguage('en')">
+      {{ 'header.languages.english' | translate }}
+    </button>
+  </div>
+
+  <button mat-icon-button (click)="drawer.toggle()">
+    <mat-icon>shopping_cart</mat-icon>
+  </button>
 </mat-toolbar>
